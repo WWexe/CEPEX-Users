@@ -11,7 +11,6 @@ import jakarta.persistence.Column;
 // Se Usuario usa SINGLE_TABLE, adicione: @DiscriminatorValue("ALUNO")
 public class Aluno extends Usuario {
 
-    // id, firstname, lastname, email, cpf, senha, perfis são herdados de Usuario
 
     @Column(unique = true, nullable = false) // RA geralmente é único e obrigatório
     private int ra;

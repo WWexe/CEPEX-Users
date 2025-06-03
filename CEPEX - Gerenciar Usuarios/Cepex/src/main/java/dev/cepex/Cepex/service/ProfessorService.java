@@ -1,65 +1,63 @@
 package dev.cepex.Cepex.service;
 
-import dev.cepex.Cepex.Dto.ProfessorDTO;
 import dev.cepex.Cepex.Model.Professor;
-import dev.cepex.Cepex.Model.TipoProfessor; // IMPORTANTE: Import para o Enum do seu pacote Model
-import dev.cepex.Cepex.Repository.ProfessorRepository; // Sua interface de Repositório
+import dev.cepex.Cepex.Model.Perfil; // Importar Perfil
+import dev.cepex.Cepex.Repository.ProfessorRepository;
+import dev.cepex.Cepex.Repository.PerfilRepository; // Importar PerfilRepository
+// Removidos os imports de Permission e UserPermissionRepository, pois usaremos Perfil
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+// Outros imports do seu UsuarioService (Page, Pageable, Specification, etc.)
 
 @Service
-public class ProfessorService {
+public class ProfessorService extends UsuarioService { // Assume que UsuarioService existe e é estendido
 
     @Autowired
-    private ProfessorRepository professorRepository; // Instância injetada do seu repositório
+    private ProfessorRepository professorRepository;
 
-    public Professor cadastrarProfessor(ProfessorDTO dto) {
-        Professor professor = new Professor();
+    @Autowired
+    private PerfilRepository perfilRepository; // Injetar o PerfilRepository
 
-        // Mapear campos básicos do DTO para a entidade
-        professor.setFirstname(dto.getFirstname());
-        professor.setLastname(dto.getLastname());
-        professor.setEmail(dto.getEmail());
-        professor.setCpf(dto.getCpf());
+    // Defina o nome exato do perfil de Coordenador como está no seu banco de dados
+    private static final String COORDENADOR_PERFIL_NOME = "ROLE_COORDENADOR"; // Exemplo, ajuste conforme necessário
 
-        // Definir a senha (sem hashing, conforme solicitado para este exercício)
-        // ATENÇÃO MUITO IMPORTANTE: Armazenar senhas em texto plano como abaixo
-        // é ALTAMENTE INSEGURO e NUNCA deve ser feito em um ambiente de produção.
-        // Em um sistema real, a senha DEVE ser "hashed" usando PasswordEncoder.
-        if (dto.getSenha() != null && !dto.getSenha().isEmpty()) {
-            professor.setSenha(dto.getSenha()); // Senha está sendo salva em texto plano
+    @Transactional
+    public Professor salvarProfessor(Professor professor) {
+        // Lógica de validação específica do professor (ex: RA) pode vir aqui
+        if (professor.getId() == null && professor.getRa() != null && professorRepository.findByRa(professor.getRa()).isPresent()) {
+            throw new IllegalArgumentException("RA de professor já cadastrado: " + professor.getRa());
+        }
+
+        // 1. Busca o Perfil de Coordenador
+        Perfil perfilCoordenador = perfilRepository.findByNome(COORDENADOR_PERFIL_NOME)
+                .orElseThrow(() -> new EntityNotFoundException(
+                        "Perfil '" + COORDENADOR_PERFIL_NOME + "' não encontrado no sistema. " +
+                                "Por favor, cadastre este perfil."
+                ));
+
+        // 2. Adiciona ou remove o perfil de coordenador com base na flag
+        if (professor.isCoordenador()) {
+            professor.addPerfil(perfilCoordenador); // Usa o método helper de Usuario.java
         } else {
-            // Se a senha for obrigatória, é melhor lançar uma exceção aqui.
-            throw new IllegalArgumentException("A senha não pode ser vazia para cadastro.");
+            professor.removePerfil(perfilCoordenador); // Usa o método helper de Usuario.java
         }
 
-        // Mapear outros campos se existirem no DTO e precisarem ser persistidos.
-        // Certifique-se que ProfessorDTO tenha os getters correspondentes (ex: getRa(), getDepartamento(), getTitulacao())
-        // e a entidade Professor tenha os setters.
-        /*
-        if (dto.getRa() != null) { // Exemplo
-            professor.setRa(dto.getRa());
-        }
-        if (dto.getDepartamento() != null) { // Exemplo
-            professor.setDepartamento(dto.getDepartamento());
-        }
-        if (dto.getTitulacao() != null) { // Exemplo
-            professor.setTitulacao(dto.getTitulacao());
-        }
-        */
-
-
-        // Definir o tipo do professor (Coordenador ou Professor regular)
-        // Esta lógica assume que seu ProfessorDTO possui o método isEhCoordenador()
-        if (dto.isEhCoordenador()) {
-            professor.setTipo(TipoProfessor.COORDENADOR); // Usa o Model.TipoProfessor.COORDENADOR
+        // 3. Salva o professor (o método base deve lidar com hash de senha, etc.)
+        // A chamada ao método save do repositório (dentro de salvarUsuarioBase ou diretamente)
+        // irá persistir as mudanças na coleção 'perfis', atualizando a tabela 'user_permission'.
+        Professor professorSalvo;
+        if (super.salvarUsuarioBase != null) { // Verifica se o método da superclasse está disponível
+            professorSalvo = (Professor) super.salvarUsuarioBase(professor);
         } else {
-            professor.setTipo(TipoProfessor.PROFESSOR);  // Usa o Model.TipoProfessor.PROFESSOR
+            professorSalvo = professorRepository.save(professor);
         }
 
-        // Salvar a entidade Professor usando a instância injetada do repositório
-        return professorRepository.save(professor); // CORRIGIDO: Chamada ao método na instância injetada
+        return professorSalvo;
     }
 
-    // Outros métodos do service (ex: atualizarProfessor, buscarProfessorPorId, listarProfessores, etc.)
+    // Outros métodos de ProfessorService (buscarProfessorPorId, listarTodosProfessores, etc.)
+    // ...
 }

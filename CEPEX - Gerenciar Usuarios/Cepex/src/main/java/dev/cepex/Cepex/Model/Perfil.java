@@ -1,57 +1,49 @@
-// Em dev.cepex.Cepex.Model.Perfil.java (adapte se o nome/pacote for diferente)
-package dev.cepex.Cepex.Model;
+package dev.cepex.Cepex.Model; // Ou seu pacote de modelo
 
 import jakarta.persistence.*;
+import java.util.Objects;
+// import java.util.Set; // Se você precisar da relação inversa
 
 @Entity
-@Table(name = "perfis") // Ou o nome da sua tabela de perfis/roles
-public class Perfil implements GrantedAuthority { // Implemente GrantedAuthority
+@Table(name = "perfil")
+public class Perfil {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "permission_id") // Nome da sua PK na tabela de perfis
+    @Column(name = "user_id")
     private Long id;
 
-    @Column(name = "nome", nullable = false, unique = true) // Ex: "ROLE_USER", "ROLE_ADMIN", "ROLE_PROFESSOR_COORDENADOR"
-    private String nome;
+    @Column(name = "nome", unique = true, nullable = false)
+    private String nome; // Ex: "ROLE_COORDENADOR", "ROLE_PROFESSOR", "ROLE_ALUNO"
 
-    // Construtores, Getters e Setters
-
-    public Perfil() {
-    }
+    public Perfil() {}
 
     public Perfil(String nome) {
         this.nome = nome;
     }
 
-    public Long getId() {
-        return id;
-    }
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+    public String getNome() { return nome; }
+    public void setNome(String nome) { this.nome = nome; }
+    // public Set<Usuario> getUsuarios() { return usuarios; }
+    // public void setUsuarios(Set<Usuario> usuarios) { this.usuarios = usuarios; }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Perfil perfil = (Perfil) o;
+        return Objects.equals(id, perfil.id) && Objects.equals(nome, perfil.nome);
     }
 
     @Override
-    public String getAuthority() {
-        return this.nome; // Spring Security usará este método para obter o nome do papel/permissão
+    public int hashCode() {
+        return Objects.hash(id, nome);
     }
 
     @Override
     public String toString() {
-        return "Perfil{" +
-                "id=" + id +
-                ", nome='" + nome + '\'' +
-                '}';
+        return "Perfil{id=" + id + ", nome='" + nome + "'}";
     }
-
-    // Considere implementar equals e hashCode baseados no 'nome' ou 'id'
 }
