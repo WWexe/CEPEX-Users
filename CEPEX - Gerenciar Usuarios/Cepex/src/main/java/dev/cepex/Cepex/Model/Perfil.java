@@ -1,8 +1,7 @@
-package dev.cepex.Cepex.Model; // Ou seu pacote de modelo
+package dev.cepex.Cepex.Model;
 
 import jakarta.persistence.*;
 import java.util.Objects;
-// import java.util.Set; // Se você precisar da relação inversa
 
 @Entity
 @Table(name = "perfil")
@@ -26,8 +25,6 @@ public class Perfil {
     public void setId(Long id) { this.id = id; }
     public String getNome() { return nome; }
     public void setNome(String nome) { this.nome = nome; }
-    // public Set<Usuario> getUsuarios() { return usuarios; }
-    // public void setUsuarios(Set<Usuario> usuarios) { this.usuarios = usuarios; }
 
     @Override
     public boolean equals(Object o) {

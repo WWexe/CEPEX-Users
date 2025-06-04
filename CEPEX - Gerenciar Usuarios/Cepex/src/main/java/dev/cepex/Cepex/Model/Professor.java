@@ -6,8 +6,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "professores") // Necessário se JOINED ou TABLE_PER_CLASS
-// @DiscriminatorValue("PROFESSOR") // Se SINGLE_TABLE
+@Table(name = "professores")
 public class Professor extends Usuario {
 
    @Column(name = "ra_professor", unique = true) // Exemplo
@@ -18,7 +17,6 @@ public class Professor extends Usuario {
     @Column(name = "is_coordenador")
     private boolean coordenador = false; // Flag para coordenador
 
-    // Construtores, Getters, Setters
     public String getRa() { return ra; }
     public void setRa(String ra) { this.ra = ra; }
     public String getDepartamento() { return departamento; }

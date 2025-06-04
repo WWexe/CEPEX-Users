@@ -3,20 +3,14 @@ package dev.cepex.Cepex.Model;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import jakarta.persistence.Column;
-// Se Usuario usa SINGLE_TABLE:
-// import jakarta.persistence.DiscriminatorValue;
 
 @Entity
-@Table(name = "coordenadores") // Nome da tabela específica para coordenadores (se houver)
-// Se Usuario usa SINGLE_TABLE, adicione: @DiscriminatorValue("COORDENADOR")
+@Table(name = "coordenadores")
 public class Coordenador extends Usuario {
 
-    // id, firstname, lastname, email, cpf, senha, perfis são herdados de Usuario
-
     @Column
-    private String areaDeCoordenacao; // Exemplo de campo específico
+    private String areaDeCoordenacao;
 
-    // Construtores
     public Coordenador() {
         super();
     }

@@ -3,7 +3,6 @@ package dev.cepex.Cepex.Dto; // Pacote correto conforme você usou
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-// Não precisa de @NotNull para boolean primitivo, pois ele sempre terá um valor (false por padrão)
 
 public class ProfessorDTO {
 
@@ -22,8 +21,6 @@ public class ProfessorDTO {
     @NotBlank(message = "O CPF é obrigatório")
     private String cpf;
 
-    // REMOVA o enum interno e o campo 'tipo' anterior daqui
-    // ADICIONE este campo:
     private boolean ehCoordenador; // Campo para o checkbox "É Coordenador?"
 
     @NotBlank(message = "A senha é obrigatória")
@@ -47,9 +44,4 @@ public class ProfessorDTO {
     public String getSenha() { return senha; }
     public void setSenha(String senha) { this.senha = senha; }
 
-    // Considere adicionar outros campos que vêm do formulário e são necessários para a entidade Professor,
-    // como 'ra', 'departamento', 'titulacao', se aplicável.
-    // private String ra;
-    // private String departamento;
-    // private String titulacao;
 }

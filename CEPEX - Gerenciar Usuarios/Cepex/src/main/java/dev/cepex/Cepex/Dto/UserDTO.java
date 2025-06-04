@@ -19,7 +19,7 @@ public class UserDTO {
     private String email;
 
     @NotBlank(message = "O CPF é obrigatório")
-    // Adicionar validação de formato de CPF se desejar
+
     private String cpf;
 
     @NotBlank(message = "A senha é obrigatória")

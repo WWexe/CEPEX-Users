@@ -31,19 +31,17 @@ public class ProfessorService extends UsuarioService { // Assume que UsuarioServ
     public void deletar(Long id){ professorRepository.deleteById(id); }
 
     @Autowired
-    private PerfilRepository perfilRepository; // Injetar o PerfilRepository
+    private PerfilRepository perfilRepository;
 
-    // Defina o nome exato do perfil de Coordenador como está no seu banco de dados
     private static final String COORDENADOR_PERFIL_NOME = "ROLE_COORDENADOR"; // Exemplo, ajuste conforme necessário
 
     @Transactional
     public Professor salvarProfessor(Professor professor) {
-        // Lógica de validação específica do professor (ex: RA) pode vir aqui
+
         if (professor.getId() == null && professor.getRa() != null && professorRepository.findByRa(professor.getRa()).isPresent()) {
             throw new IllegalArgumentException("RA de professor já cadastrado: " + professor.getRa());
         }
 
-        // 1. Busca o Perfil de Coordenador
         Perfil perfilCoordenador = perfilRepository.findByNome(COORDENADOR_PERFIL_NOME)
                 .orElseThrow(() -> new EntityNotFoundException(
                         "Perfil '" + COORDENADOR_PERFIL_NOME + "' não encontrado no sistema. " +
