@@ -2,34 +2,32 @@ package dev.cepex.Cepex.Model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
-import jakarta.persistence.Column;
-// Se Usuario usa SINGLE_TABLE:
-// import jakarta.persistence.DiscriminatorValue;
+// No longer needs jakarta.persistence.Column for its own 'ra'
 
 @Entity
-@Table(name = "alunos") // Nome da tabela específica para alunos (se JOINED ou TABLE_PER_CLASS)
-// Se Usuario usa SINGLE_TABLE, adicione: @DiscriminatorValue("ALUNO")
+// Regarding @Table(name = "alunos"):
+// If using InheritanceType.SINGLE_TABLE (default for abstract class hierarchies),
+// this annotation might be ignored, as all users go into the 'usuarios' table.
+// If using InheritanceType.JOINED, this is correct for the joined part of Aluno.
+@Table(name = "alunos")
 public class Aluno extends Usuario {
 
+    // REMOVE the entire 'int ra' field declaration:
+    // @Column(unique = true, nullable = false)
+    // private int ra;
 
-    @Column(unique = true, nullable = false) // RA geralmente é único e obrigatório
-    private int ra;
+    private String curso;
 
-    private String curso; // Considere criar uma entidade Curso se for mais complexo
-
-    // Construtores (opcional, mas útil)
     public Aluno() {
-        super(); // Chama o construtor da classe pai
+        super(); // Calls the constructor of the Usuario class
     }
 
-    // Getters e Setters para campos específicos de Aluno
-    public int getRa() {
-        return ra;
-    }
+    // REMOVE the setter for 'int ra':
+    // public void setRa(int ra) {
+    //     this.ra = ra;
+    // }
 
-    public void setRa(int ra) {
-        this.ra = ra;
-    }
+    // getRa() and setRa(String ra) are inherited from Usuario.
 
     public String getCurso() {
         return curso;

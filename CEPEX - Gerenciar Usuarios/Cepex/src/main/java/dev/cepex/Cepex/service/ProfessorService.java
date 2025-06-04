@@ -1,7 +1,9 @@
 package dev.cepex.Cepex.service;
 
+import dev.cepex.Cepex.Model.Aluno;
 import dev.cepex.Cepex.Model.Professor;
 import dev.cepex.Cepex.Model.Perfil; // Importar Perfil
+import dev.cepex.Cepex.Repository.AlunoRepository;
 import dev.cepex.Cepex.Repository.ProfessorRepository;
 import dev.cepex.Cepex.Repository.PerfilRepository; // Importar PerfilRepository
 // Removidos os imports de Permission e UserPermissionRepository, pois usaremos Perfil
@@ -10,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 // Outros imports do seu UsuarioService (Page, Pageable, Specification, etc.)
 
 @Service
@@ -17,6 +21,14 @@ public class ProfessorService extends UsuarioService { // Assume que UsuarioServ
 
     @Autowired
     private ProfessorRepository professorRepository;
+
+    public List<Professor> listarTodos(){ return professorRepository.findAll(); }
+
+    public Professor buscarPorId(Long id){ return professorRepository.findById(id).orElse(null); }
+
+    public Professor salvar(Aluno aluno){ return professorRepository.save(aluno); }
+
+    public void deletar(Long id){ professorRepository.deleteById(id); }
 
     @Autowired
     private PerfilRepository perfilRepository; // Injetar o PerfilRepository
@@ -42,22 +54,12 @@ public class ProfessorService extends UsuarioService { // Assume que UsuarioServ
         if (professor.isCoordenador()) {
             professor.addPerfil(perfilCoordenador); // Usa o método helper de Usuario.java
         } else {
-            professor.removePerfil(perfilCoordenador); // Usa o método helper de Usuario.java
+            professor.removerPerfil(perfilCoordenador); // Usa o método helper de Usuario.java
         }
 
-        // 3. Salva o professor (o método base deve lidar com hash de senha, etc.)
-        // A chamada ao método save do repositório (dentro de salvarUsuarioBase ou diretamente)
-        // irá persistir as mudanças na coleção 'perfis', atualizando a tabela 'user_permission'.
-        Professor professorSalvo;
-        if (super.salvarUsuarioBase != null) { // Verifica se o método da superclasse está disponível
-            professorSalvo = (Professor) super.salvarUsuarioBase(professor);
-        } else {
-            professorSalvo = professorRepository.save(professor);
-        }
+        Professor professorSalvo = (Professor) super.salvar(professor);
 
         return professorSalvo;
     }
 
-    // Outros métodos de ProfessorService (buscarProfessorPorId, listarTodosProfessores, etc.)
-    // ...
 }

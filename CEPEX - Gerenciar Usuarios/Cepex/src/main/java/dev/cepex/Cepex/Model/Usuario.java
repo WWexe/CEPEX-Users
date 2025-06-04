@@ -34,6 +34,7 @@ public abstract class Usuario {
 
     @NotBlank(message = "O RA é obrigatório")
     @Size(min = 8, max = 8, message = "RA Inválido")
+    @Column(unique = true)
     private String ra;
 
     @NotBlank(message = "O CPF é obrigatório")
@@ -71,7 +72,6 @@ public abstract class Usuario {
         this.senha = senha;
     }
 
-    // Getters e Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
     public String getFirstname() { return firstname; }
@@ -120,6 +120,17 @@ public abstract class Usuario {
         if (id != null) {
             return Objects.hash(id);
         }
-        return Objects.hash(email, cpf); // Ou apenas um deles se for garantidamente único e não nulo
+        return Objects.hash(email, cpf);
+    }
+    public void addPerfil(Perfil perfil) {
+        if (this.perfis == null) {
+            this.perfis = new HashSet<>();
+        }
+        this.perfis.add(perfil);
+    }
+    public void removerPerfil(Perfil perfil) {
+        if (this.perfis != null) {
+            this.perfis.remove(perfil);
+        }
     }
 }

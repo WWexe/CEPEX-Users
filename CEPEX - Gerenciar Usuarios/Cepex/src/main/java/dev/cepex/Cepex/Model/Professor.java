@@ -13,7 +13,7 @@ public class Professor extends Usuario {
    @Column(name = "ra_professor", unique = true) // Exemplo
     private String ra;
 
-    private String departamento;*/
+    private String departamento;
 
     @Column(name = "is_coordenador")
     private boolean coordenador = false; // Flag para coordenador
