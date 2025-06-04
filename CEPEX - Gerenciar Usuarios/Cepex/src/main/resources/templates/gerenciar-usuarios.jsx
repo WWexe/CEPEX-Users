@@ -40,13 +40,11 @@
       </svg>
     );
 
-    // Dados iniciais mocados
     let DADOS_INICIAIS_USUARIOS = [ 
       { id: 1, firstname: 'Ana', lastname: 'Silva', email: 'ana.silva@email.com', ra: '11223344', cpf: '111.222.333-44', senha: 'senha123', tipo: 'Aluno', curso: 'Engenharia de Software', coordenador: false, perfis: [{ nome: 'ROLE_ALUNO' }] },
       { id: 2, firstname: 'Carlos', lastname: 'Pereira', email: 'carlos.pereira@email.com', ra: '99887766', cpf: '555.666.777-88', senha: 'outrasenha', tipo: 'Professor', curso: '', coordenador: true, perfis: [{ nome: 'ROLE_PROFESSOR' }, { nome: 'ROLE_COORDENADOR' }] },
     ];
 
-    // Simulação de um serviço de API
     const apiService = {
       getUsuarios: async () => new Promise(resolve => setTimeout(() => resolve([...DADOS_INICIAIS_USUARIOS]), 800)),
       salvarUsuario: async (usuario) => new Promise(resolve => setTimeout(() => {
@@ -100,8 +98,7 @@
         </div>
       );
     };
-
-
+    
     function App() {
       const [usuarios, setUsuarios] = useState([]);
       const [formularioAberto, setFormularioAberto] = useState(false);
