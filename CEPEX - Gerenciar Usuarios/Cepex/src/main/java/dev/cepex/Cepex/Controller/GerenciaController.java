@@ -13,7 +13,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDate;
 
-@Controller
+@RestController
 @RequestMapping("/gerencia-usuarios")
 public class GerenciaController {
 
@@ -23,8 +23,18 @@ public class GerenciaController {
     @Autowired
     private UsuarioService usuarioService;
 
-    @GetMapping("/gerencia-usuarios/delete")
-     public String deletar() {
+    @DeleteMapping("/gerencia-usuarios/delete")
+    public String deletar() {
         return "gerencia-usuarios/delete";
     }
 }
+
+// get mapping geral
+// get byid(passar parametro id)
+// post mapping(para cadastro)
+// DeleteMapping
+//PutMapping(dar update na lista)
+
+
+
+//Rest controller
