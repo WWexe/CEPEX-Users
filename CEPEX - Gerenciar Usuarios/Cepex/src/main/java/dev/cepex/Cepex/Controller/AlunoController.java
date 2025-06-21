@@ -24,7 +24,7 @@ public class AlunoController {
    private UsuarioService usuarioService;
 
 
-   @GetMapping("/novo")
+   @PostMapping("/novo")
     public String formularioNovoAluno(Model model) {
        model.addAttribute("aluno", new Aluno());
        return "/gerencia-usuarios/novo";
@@ -35,6 +35,5 @@ public class AlunoController {
        alunoService.salvar(aluno);
        return "redirect:/gerencia-usuarios/novo";
    }
-
 
 }

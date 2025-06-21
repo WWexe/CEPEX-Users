@@ -16,4 +16,5 @@ import java.time.LocalDate;
 @Controller
 
 public class ProfessorController {
+
 }
