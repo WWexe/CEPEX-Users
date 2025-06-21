@@ -24,7 +24,11 @@ public class GerenciaController {
     private UsuarioService usuarioService;
 
     @DeleteMapping("/gerencia-usuarios/delete")
+<<<<<<< HEAD
      public String deletar() {
+=======
+    public String deletar() {
+>>>>>>> d4b07360165872038e325b931328319a0daf423d
         return "gerencia-usuarios/delete";
     }
 }
